@@ -3,10 +3,11 @@ import numpy as np
 from utils.utils import AverageMeter
 from utils.eval import Accuracy, getPreds, MPJPE
 from utils.debugger import Debugger
-from models.layers.FusionCriterion import FusionCriterion
 import cv2
 import ref
 from progress.bar import Bar
+
+
 
 def step(split, epoch, opt, dataLoader, model, criterion, optimizer = None):
   if split == 'train':
@@ -35,12 +36,12 @@ def step(split, epoch, opt, dataLoader, model, criterion, optimizer = None):
       debugger.showImg()
       debugger.saveImg('debug/{}.png'.format(i))
 
-    loss = FusionCriterion(opt.regWeight, opt.varWeight)(reg, target3D_var)
-    Loss3D.update(loss.data[0], input.size(0))
+    loss = opt.regWeight / 16 * criterion(reg, target3D_var[:,:,2])
+    Loss3D.update(loss.data.item(), input.size(0))
     for k in range(opt.nStack):
       loss += criterion(output[k], target2D_var)
 
-    Loss.update(loss.data[0], input.size(0))
+    Loss.update(loss.data.item(), input.size(0))
     Acc.update(Accuracy((output[opt.nStack - 1].data).cpu().numpy(), (target2D_var.data).cpu().numpy()))
     mpjpe, num3D = MPJPE((output[opt.nStack - 1].data).cpu().numpy(), (reg.data).cpu().numpy(), meta)
     if num3D > 0:
