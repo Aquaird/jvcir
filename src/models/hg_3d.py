@@ -200,7 +200,8 @@ class HourglassNet3D(nn.Module):
         fx  = self.softargmax(fx)
         #[batch_size, 16, 3]
         #print(fx.size(), reg.view(-1,16,1).size())
-        p3d = torch.cat((fx, reg.view(-1, 16, 1)), dim=-1)
+        position_3d = (reg + 1) / 2 * self.nFeats
+        p3d = torch.cat((fx, position_3d.view(-1, 16, 1)), dim=-1)
         out.append(p3d)
         p3d = p3d.view(-1,16, 3, 1)
         # [batch_size, 3, 3]

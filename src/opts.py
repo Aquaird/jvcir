@@ -21,11 +21,12 @@ class opts():
     self.parser.add_argument('-dropLR', type = int, default = 1000000, help = 'drop LR')
     self.parser.add_argument('-nEpochs', type = int, default = 60, help = '#training epochs')
     self.parser.add_argument('-valIntervals', type = int, default = 5, help = '#valid intervel')
-    self.parser.add_argument('-trainBatch', type = int, default = 6, help = 'Mini-batch size')
+    self.parser.add_argument('-trainBatch', type = int, default = 12, help = 'Mini-batch size')
     
     self.parser.add_argument('-nRegModules', type = int, default = 2, help = '#depth regression modules')
     self.parser.add_argument('-nCamModules', type = int, default = 2, help = '#camara regression modules')
     self.parser.add_argument('-ratio3D', type = int, default = 0, help = 'weak label data ratio')
+    self.parser.add_argument('-trainRES', type = int, default = 0, help = 'train regression with only h36m')
     self.parser.add_argument('-regWeight', type = float, default = 0, help = 'depth regression loss weight')
     self.parser.add_argument('-varWeight', type = float, default = 0, help = 'variance loss weight')
     

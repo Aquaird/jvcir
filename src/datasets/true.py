@@ -60,5 +60,6 @@ class TRUE(data.Dataset):
         for i in range(ref.nJoints):
             pt = Transform3D(pts_3d[i], c, s, 0, ref.outputRes)
             out3d[i,:2] = pt[:2]
-            out3d[i,2] = pt[2] / ref.outputRes *2 -1
+            out3d[i,2] = pt[2]
 
+        return out3d, pts_3d_mono

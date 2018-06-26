@@ -91,7 +91,31 @@ def MPJPE(output2D, output3D, meta):
   else:
     return 0, 0
     
-
+def pointMPJPE(p, meta):
+  meta = meta.numpy()
+  h36mSumLen = 4296.99233013
+  root = 6
+  err = 0
+  num3D = 0
+  for i in range(p.shape[0]):
+    s = meta[i].sum()
+    if not (s > - ref.eps and s < ref.eps):
+      num3D += 1
+      lenPred = 0
+      for e in ref.edges:
+        lenPred += ((p[i, e[0]] - p[i, e[1]]) ** 2).sum() ** 0.5 
+      pRoot = p[i, root].copy()
+      for j in range(ref.nJoints):
+        p[i, j] = (p[i, j] - pRoot) / lenPred * h36mSumLen + meta[i, root]
+      p[i, 7] = (p[i, 6] + p[i, 8]) / 2
+      for j in range(ref.nJoints):
+        dis = ((p[i, j] - meta[i, j]) ** 2).sum() ** 0.5
+        err += dis / ref.nJoints
+  if num3D > 0:
+    return err / num3D, num3D
+  else:
+    return 0, 0
+ 
   
   
 
